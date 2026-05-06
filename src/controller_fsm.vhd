@@ -39,7 +39,40 @@ end controller_fsm;
 
 architecture FSM of controller_fsm is
 
+    type sm_state is (clearDisplay, loadA, loadB, displayResult);
+    signal current_state, next_state: sm_state;
+
 begin
 
+
+-- next state logic
+next_state <=   clearDisplay when (current_state = displayResult) else
+                loadA when current_state = clearDisplay else
+                loadB when current_state = loadA else
+                displayResult when current_state = loadB else
+                current_state;
+
+
+-- output logic
+with current_state select
+o_cycle <=  "0001" when clearDisplay,
+            "0010" when loadA,
+            "0100" when loadB,
+            "1000" when displayResult,
+            "1111" when others;
+                
+
+	state_register : process(i_adv)
+	begin
+        if rising_edge(i_adv) then
+           if i_reset = '1' then
+               current_state <= clearDisplay;
+           else
+                current_state <= next_state;
+            end if;
+        end if;
+	end process state_register;
+
+    
 
 end FSM;
