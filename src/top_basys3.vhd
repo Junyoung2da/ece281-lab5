@@ -151,18 +151,18 @@ begin
            i_adv       => w_btn_db_out,
            o_cycle     => w_o_cycle
 	   );
-	register_A: process (clk)
+	register_A: process (w_btn_db_out)
 	begin
-        if rising_edge(clk) then
+        if falling_edge(w_btn_db_out) then
             if w_o_cycle(1) = '1' then
                 w_register_A <= sw(7 downto 0);
             end if;
         end if;
     end process;
     
-	register_B: process (clk)
+	register_B: process (w_btn_db_out)
 	begin
-        if rising_edge(clk) then
+        if falling_edge(w_btn_db_out) then
             if w_o_cycle(2) = '1' then
                 w_register_B <= sw(7 downto 0);
             end if;
