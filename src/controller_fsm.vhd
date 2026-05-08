@@ -59,18 +59,16 @@ o_cycle <=  "0001" when clearDisplay,
             "0010" when loadA,
             "0100" when loadB,
             "1000" when displayResult,
-            "1111" when others;
+            "0001" when others;
                 
 
-	state_register : process(i_adv)
+	state_register : process(i_adv, i_reset)
 	begin
-        if rising_edge(i_adv) then
-           if i_reset = '1' then
-               current_state <= clearDisplay;
-           else
-                current_state <= next_state;
-            end if;
-        end if;
+	   if i_reset = '1' then
+	       current_state <= clearDisplay;
+	   elsif rising_edge(i_adv) then
+	       current_state <= next_state;
+	   end if;
 	end process state_register;
 
     
